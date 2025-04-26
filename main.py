@@ -13,8 +13,9 @@ def main(page: ft.Page):
 
     n = len(solucion4reinas[0])
     current_solution_index = 1
+    squares = []
+    board = ft.Column()
 
-    # TODO: Modularizar funcion
     def update_board():
         squares.clear()  # Limpiar el tablero
         for i in range(n):
@@ -45,7 +46,6 @@ def main(page: ft.Page):
                     )
 
         board.controls = [ft.Row(controls=row) for row in squares]
-        board.update()
 
     # Funciones para los botones de navegacion
     def prev_btn_clicked(e):
@@ -119,36 +119,7 @@ def main(page: ft.Page):
             ),
         )
 
-    squares = []
-
-    for i in range(n):
-        squares.append([])
-        for j in range(n):
-            isPar = i % 2
-            if isPar == 0:
-                squares[i].append(
-                    create_square(
-                        "white" if j % 2 == 0 else "black",
-                        used=(
-                            True
-                            if j == solucion4reinas[current_solution_index - 1][i]
-                            else False
-                        ),
-                    )
-                )
-            else:
-                squares[i].append(
-                    create_square(
-                        "black" if j % 2 == 0 else "white",
-                        used=(
-                            True
-                            if j == solucion4reinas[current_solution_index - 1][i]
-                            else False
-                        ),
-                    )
-                )
-
-    board = ft.Column(controls=[ft.Row(controls=row) for row in squares])
+    update_board()
 
     page.add(
         ft.Column(
