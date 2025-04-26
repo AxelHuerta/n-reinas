@@ -12,13 +12,16 @@ def main(page: ft.Page):
     ]
 
     solucion8reinas = [
-        [1, 3, 0, 2, 4, 6, 5, 7],
-        [1, 4, 6, 2, 0, 3, 5, 7],
-        [2, 4, 1, 3, 0, 5, 7, 6],
-        [2, 0, 3, 5, 7, 1, 4, 6],
-        [3, 0, 2, 5, 7, 1, 4, 6],
-        [3, 0, 2, 4, 6, 1, 5, 7],
-        [4, 1, 3, 0, 2, 5, 7, 6],
+        [0, 4, 7, 5, 2, 6, 1, 3],
+        [0, 5, 7, 2, 6, 3, 1, 4],
+        [0, 6, 3, 5, 7, 1, 4, 2],
+        [0, 6, 4, 7, 1, 3, 5, 2],
+        [1, 3, 5, 7, 2, 0, 6, 4],
+        [1, 4, 6, 0, 2, 7, 5, 3],
+        [1, 4, 6, 3, 0, 7, 5, 2],
+        [1, 5, 0, 6, 3, 7, 2, 4],
+        [1, 5, 7, 2, 0, 3, 6, 4],
+        [1, 6, 2, 5, 7, 4, 0, 3],
     ]
 
     n = len(solucion4reinas[0])
@@ -41,11 +44,17 @@ def main(page: ft.Page):
             solution = solucion4reinas
             current_solution_index = 1
             total_solutions.value = f"{current_solution_index} / {len(solution)}"
+            total_solutions_description.value = (
+                f"Se encontraron {len(solution)} soluciones para N = {n}"
+            )
             update_board()
         elif n == 8:
             solution = solucion8reinas
             current_solution_index = 1
             total_solutions.value = f"{current_solution_index} / {len(solution)}"
+            total_solutions_description.value = (
+                f"Se encontraron {len(solution)} soluciones para N = {n}"
+            )
             update_board()
         else:
             solution = solucion4reinas
