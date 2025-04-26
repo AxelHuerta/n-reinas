@@ -11,13 +11,49 @@ def main(page: ft.Page):
         [2, 0, 3, 1],
     ]
 
+    solucion8reinas = [
+        [1, 3, 0, 2, 4, 6, 5, 7],
+        [1, 4, 6, 2, 0, 3, 5, 7],
+        [2, 4, 1, 3, 0, 5, 7, 6],
+        [2, 0, 3, 5, 7, 1, 4, 6],
+        [3, 0, 2, 5, 7, 1, 4, 6],
+        [3, 0, 2, 4, 6, 1, 5, 7],
+        [4, 1, 3, 0, 2, 5, 7, 6],
+    ]
+
     n = len(solucion4reinas[0])
+    solution = solucion4reinas
+    total_solutions = len(solution)
     current_solution_index = 1
     squares = []
     board = ft.Column()
 
+    def get_n(e):
+        nonlocal n
+        nonlocal solution
+        nonlocal current_solution_index
+        nonlocal total_solutions
+
+        n = int(input.value)
+        print(f"Input = {n}")
+
+        if n == 4:
+            solution = solucion4reinas
+            current_solution_index = 1
+            total_solutions.value = f"{current_solution_index} / {len(solution)}"
+            update_board()
+        elif n == 8:
+            solution = solucion8reinas
+            current_solution_index = 1
+            total_solutions.value = f"{current_solution_index} / {len(solution)}"
+            update_board()
+        else:
+            solution = solucion4reinas
+        page.update()
+
     def update_board():
         squares.clear()  # Limpiar el tablero
+        print(f"Valor de n = {n}")
         for i in range(n):
             squares.append([])
             for j in range(n):
@@ -28,7 +64,7 @@ def main(page: ft.Page):
                             "white" if j % 2 == 0 else "black",
                             used=(
                                 True
-                                if j == solucion4reinas[current_solution_index - 1][i]
+                                if j == solution[current_solution_index - 1][i]
                                 else False
                             ),
                         )
@@ -36,10 +72,11 @@ def main(page: ft.Page):
                 else:
                     squares[i].append(
                         create_square(
+                            # Operador ternario
                             "black" if j % 2 == 0 else "white",
                             used=(
                                 True
-                                if j == solucion4reinas[current_solution_index - 1][i]
+                                if j == solution[current_solution_index - 1][i]
                                 else False
                             ),
                         )
@@ -50,18 +87,20 @@ def main(page: ft.Page):
     # Funciones para los botones de navegacion
     def prev_btn_clicked(e):
         nonlocal current_solution_index
+        nonlocal total_solutions
         if current_solution_index > 1:
             current_solution_index -= 1
-            total_solutions.value = f"{current_solution_index} / {len(solucion4reinas)}"
+            total_solutions.value = f"{current_solution_index} / {len(solution)}"
             update_board()
             print("Previo")
             page.update()
 
     def next_btn_clicked(e):
         nonlocal current_solution_index
-        if current_solution_index < len(solucion4reinas):
+        nonlocal total_solutions
+        if current_solution_index < len(solution):
             current_solution_index += 1
-            total_solutions.value = f"{current_solution_index} / {len(solucion4reinas)}"
+            total_solutions.value = f"{current_solution_index} / {len(solution)}"
             update_board()
             print("Siguiente")
             page.update()
@@ -102,7 +141,7 @@ def main(page: ft.Page):
     button = ft.ElevatedButton(
         text="Calcular soluciones",
         bgcolor=ft.Colors.TEAL,
-        on_click=lambda e: print("Calculando..."),
+        on_click=get_n,
     )
 
     def create_square(color: str, used: bool = False):
@@ -129,7 +168,10 @@ def main(page: ft.Page):
                     [input, button],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
-                ft.Row([board], alignment=ft.MainAxisAlignment.CENTER),
+                ft.Row(
+                    [board],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
                 ft.Row(
                     [prev_btn, total_solutions, next_btn],
                     alignment=ft.MainAxisAlignment.CENTER,
@@ -138,6 +180,9 @@ def main(page: ft.Page):
                     [total_solutions_description], alignment=ft.MainAxisAlignment.CENTER
                 ),
             ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            scroll=ft.ScrollMode.ALWAYS,
+            expand=True,
         ),
     )
 
