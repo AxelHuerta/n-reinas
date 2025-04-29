@@ -1,32 +1,17 @@
 import flet as ft
 from components.header import Header
+from client import Client
 
 
 def main(page: ft.Page):
     page.title = "Problema de las N Reinas"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
-    solucion4reinas = [
-        [1, 3, 0, 2],
-        [2, 0, 3, 1],
-    ]
+    client = Client()
+    client.connect()
 
-    solucion8reinas = [
-        [0, 4, 7, 5, 2, 6, 1, 3],
-        [0, 5, 7, 2, 6, 3, 1, 4],
-        [0, 6, 3, 5, 7, 1, 4, 2],
-        [0, 6, 4, 7, 1, 3, 5, 2],
-        [1, 3, 5, 7, 2, 0, 6, 4],
-        [1, 4, 6, 0, 2, 7, 5, 3],
-        [1, 4, 6, 3, 0, 7, 5, 2],
-        [1, 5, 0, 6, 3, 7, 2, 4],
-        [1, 5, 7, 2, 0, 3, 6, 4],
-        [1, 6, 2, 5, 7, 4, 0, 3],
-    ]
-
-    n = len(solucion4reinas[0])
-    solution = solucion4reinas
-    total_solutions = len(solution)
+    solution = []
+    n = len(solution)
     current_solution_index = 1
     squares = []
     board = ft.Column()
@@ -35,29 +20,19 @@ def main(page: ft.Page):
         nonlocal n
         nonlocal solution
         nonlocal current_solution_index
-        nonlocal total_solutions
 
         n = int(input.value)
+        server_response = client.query(n)
+        solution = eval(server_response)
+        current_solution_index = 1
+        total_solutions_label.value = f"{current_solution_index} / {len(solution)}"
+        total_solutions_description.value = (
+            f"Se encontraron {len(solution)} soluciones para N = {n}"
+        )
         print(f"Input = {n}")
+        print("Soluciones = ", solution)
 
-        if n == 4:
-            solution = solucion4reinas
-            current_solution_index = 1
-            total_solutions.value = f"{current_solution_index} / {len(solution)}"
-            total_solutions_description.value = (
-                f"Se encontraron {len(solution)} soluciones para N = {n}"
-            )
-            update_board()
-        elif n == 8:
-            solution = solucion8reinas
-            current_solution_index = 1
-            total_solutions.value = f"{current_solution_index} / {len(solution)}"
-            total_solutions_description.value = (
-                f"Se encontraron {len(solution)} soluciones para N = {n}"
-            )
-            update_board()
-        else:
-            solution = solucion4reinas
+        update_board()
         page.update()
 
     def update_board():
@@ -73,7 +48,7 @@ def main(page: ft.Page):
                             "white" if j % 2 == 0 else "black",
                             used=(
                                 True
-                                if j == solution[current_solution_index - 1][i]
+                                if j + 1 == solution[current_solution_index - 1][i]
                                 else False
                             ),
                         )
@@ -85,7 +60,7 @@ def main(page: ft.Page):
                             "black" if j % 2 == 0 else "white",
                             used=(
                                 True
-                                if j == solution[current_solution_index - 1][i]
+                                if j + 1 == solution[current_solution_index - 1][i]
                                 else False
                             ),
                         )
@@ -96,20 +71,18 @@ def main(page: ft.Page):
     # Funciones para los botones de navegacion
     def prev_btn_clicked(e):
         nonlocal current_solution_index
-        nonlocal total_solutions
         if current_solution_index > 1:
             current_solution_index -= 1
-            total_solutions.value = f"{current_solution_index} / {len(solution)}"
+            total_solutions_label.value = f"{current_solution_index} / {len(solution)}"
             update_board()
             print("Previo")
             page.update()
 
     def next_btn_clicked(e):
         nonlocal current_solution_index
-        nonlocal total_solutions
         if current_solution_index < len(solution):
             current_solution_index += 1
-            total_solutions.value = f"{current_solution_index} / {len(solution)}"
+            total_solutions_label.value = f"{current_solution_index} / {len(solution)}"
             update_board()
             print("Siguiente")
             page.update()
@@ -130,15 +103,15 @@ def main(page: ft.Page):
     )
 
     # Texto de soluciones
-    total_solutions = ft.Text(
-        f"{current_solution_index} / {len(solucion4reinas)}",
+    total_solutions_label = ft.Text(
+        f"{current_solution_index} / {len(solution)}",
         size=20,
         color=ft.Colors.WHITE,
     )
 
     # Descripcion de soluciones
     total_solutions_description = ft.Text(
-        f"Se encontraron {len(solucion4reinas)} soluciones para N = {n}",
+        f"Se encontraron {len(solution)} soluciones para N = {n}",
         size=20,
         color=ft.Colors.WHITE,
     )
@@ -182,7 +155,7 @@ def main(page: ft.Page):
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
                 ft.Row(
-                    [prev_btn, total_solutions, next_btn],
+                    [prev_btn, total_solutions_label, next_btn],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
                 ft.Row(
