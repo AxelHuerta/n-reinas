@@ -22,6 +22,10 @@ def main(page: ft.Page):
         nonlocal current_solution_index
 
         n = int(input.value)
+
+        if n < 4:
+            return
+
         server_response = client.query(n)
         solution = eval(server_response)
         current_solution_index = 1
@@ -146,6 +150,10 @@ def main(page: ft.Page):
         ft.Column(
             [
                 ft.Row([title], alignment=ft.MainAxisAlignment.CENTER),
+                ft.Row(
+                    [ft.Text("N debe ser mayor o igual a 4")],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
                 ft.Row(
                     [input, button],
                     alignment=ft.MainAxisAlignment.CENTER,
