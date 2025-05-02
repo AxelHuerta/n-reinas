@@ -1,5 +1,4 @@
 import flet as ft
-from components.header import Header
 from client import Client
 
 
@@ -122,7 +121,6 @@ def main(page: ft.Page):
 
     queen_logo = ft.Image(src="./queen.png")
 
-    title = Header()
     input = ft.TextField(label="Número de reinas", value="4")
     button = ft.ElevatedButton(
         text="Calcular soluciones",
@@ -149,7 +147,28 @@ def main(page: ft.Page):
     page.add(
         ft.Column(
             [
-                ft.Row([title], alignment=ft.MainAxisAlignment.CENTER),
+                ft.Row(
+                    [
+                        ft.Column(
+                            controls=[
+                                ft.Text(
+                                    "Problema de las N Reinas",
+                                    size=32,
+                                    weight=ft.FontWeight.BOLD,
+                                    text_align=ft.TextAlign.CENTER,
+                                    color=ft.Colors.WHITE,
+                                ),
+                                ft.Text(
+                                    "Resuelve el problema de las N Reinas en un tablero de ajedrez.",
+                                    size=16,
+                                    text_align=ft.TextAlign.CENTER,
+                                    color=ft.Colors.WHITE,
+                                ),
+                            ]
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
                 ft.Row(
                     [ft.Text("N debe ser mayor o igual a 4")],
                     alignment=ft.MainAxisAlignment.CENTER,
